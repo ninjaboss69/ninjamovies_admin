@@ -19,9 +19,12 @@ export const uploadImageToServer = async (file) => {
 
 export const getDownloadableURL = async (imageLink) => {
     try {
-        const response = await instanceForJSON.get(`bucket${imageLink}`);
-        console.log("Downloadable URL:", response.data.url);
-        return decodeURIComponent(response.data.url);
+        // console.log("Downloadable URL:", response.data.url);
+        // return decodeURIComponent(response.data.url);
+        const urlLink = decodeURIComponent(appconfig.api_url+"/website/get-image-url?image="+imageLink);
+        const response = await instanceForJSON.get(urlLink,{headers: {
+ 'Content-Type': 'application/json'}});
+        return response.data.url;
     } catch (error) {
         console.error('Error getting downloadable URL:', error);
         return appconfig.default_image;

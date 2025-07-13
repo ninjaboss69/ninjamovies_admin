@@ -1,14 +1,29 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import { appconfig } from '../../config';
 
 const LoginPage = () => {
-	const [email, setEmail] = useState('');
+	const [username, setUserName] = useState('');
 	const [password, setPassword] = useState('');
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		console.log('Email:', email);
-		console.log('Password:', password);
+		try{
+		const res  = await axios.post(`${appconfig.api_url}/backpanel/login-admin`,{username,password},
+			{
+ withCredentials: true
+});
+		if(!res.data.accessToken){
+			throw Error("Login Failed")
+		}
+		const accessToken = res.data.accessToken;
+		localStorage.setItem("accessToken",accessToken);
+		}catch(err){
+		console.log("Login Failed");
+		console.log(err.message);
+		}
+		
 	};
 
 	return (
@@ -17,14 +32,14 @@ const LoginPage = () => {
 				<h2 className="text-2xl font-bold text-center">Login</h2>
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
-						<label htmlFor="email" className="block text-sm font-medium text-gray-700">
-							Email
+						<label htmlFor="username" className="block text-sm font-medium text-gray-700">
+							Username
 						</label>
 						<input
-							type="email"
-							id="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							type="text"
+							id="username"
+							value={username}
+							onChange={(e) => setUserName(e.target.value)}
 							required
 							className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
 						/>

@@ -10,11 +10,7 @@ class MyUploadAdapter {
     async singleFileUpload(file) {
 
         const imageLink = await uploadImageToServer(file);
-
-        const image = await getDownloadableURL(imageLink);
-
-        console.log("Image link:", image);
-        return image
+        return `${appconfig.api_url}/bucket${imageLink}`
 
     }
 
@@ -26,13 +22,14 @@ class MyUploadAdapter {
                     new Promise((resolve, reject) => {
                         this.singleFileUpload(file)
                             .then((downloadURL) => {
+                                console.log("Downloadable url is ",downloadURL);
                                 return resolve({
                                     default: downloadURL
                                 })
                             })
                             .catch((err) => {
                                 console.log(err)
-                                reject('something went fucked up while uploading the image')
+                                reject('something went messed up while uploading the image')
                             })
                     })
             )

@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import ErrorPage from '../provider/error/ErrorPage';
 import Navbar from '../component/nav';
+import ProtectedRoute from '../hook/Auth';
 
 const Home = lazy(() => import('../pages/home'));
 const About = lazy(() => import('../pages/about-us'));
@@ -26,6 +27,7 @@ export const routes = [
 				path: '/',
 				index: true,
 				element: (
+
 					<Suspense fallback={<div>Loading home page...</div>}>
 						<Home />
 					</Suspense>
@@ -58,8 +60,21 @@ export const routes = [
 					</Suspense>
 				),
 			},
+
 			{
 				key: 4,
+				path: '/editor',
+				element: (
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Editor Page...</div>}>
+							<Write />
+					</Suspense>
+					</ProtectedRoute>
+
+				),
+			},
+			{
+				key: 666,
 				path: '/login',
 				element: (
 					<Suspense fallback={<div>Loading Login Page...</div>}>
@@ -67,16 +82,8 @@ export const routes = [
 					</Suspense>
 				),
 			},
-			{
-				key: 4,
-				path: '/editor',
-				element: (
-					<Suspense fallback={<div>Loading Editor Page...</div>}>
-						<Write />
-					</Suspense>
-				),
-			},
 		],
 		errorElement: <ErrorPage />,
 	},
 ];
+
