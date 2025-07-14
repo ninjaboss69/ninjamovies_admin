@@ -2,16 +2,19 @@
 export default function ProtectedRoute({ children }) {
     const isAuthenticated = true;
 
+    // Be careful here, we cannot possible check if the user is authenticated here
+    // We also cannot check with accessToken time, since we are refreshing here
+    // We also cannot check wiht refreshToken time, since it is stored in cookie with httpOnly
+
     try {
         const token = localStorage.getItem("accessToken");
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const currentTime = Math.floor(Date.now() / 1000);
-        console.log("user is valid");
-    } catch (e) {
-        console.log(e);
-        console.log("error __ ");
-        window.location.href = "/login";
+        if (!token) {
+            window.location.href = "/login";
+        }
 
+
+    } catch (e) {
+        window.location.href = "/login";
     }
 
     if (!isAuthenticated) {

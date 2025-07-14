@@ -4,7 +4,7 @@ import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
 import { editorConfig } from './constant';
 import { CustomUploadAdapterPlugin } from './CustomUploadAdapter';
 
-function Editor() {
+function Editor({ setPostContent }) {
     return (
         <div className='w-full'>
             <CKEditor
@@ -28,7 +28,7 @@ function Editor() {
                 }}
                 onChange={(event, editor) => {
                     const data = editor.getData();
-                    console.log(data);
+                    setPostContent("content", data);
                 }}
             />
         </div>

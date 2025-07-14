@@ -4,10 +4,10 @@ import Hook from "./hook";
 function Write() {
 
 
-    const {savePost, cancelWrite} = Hook();
+  const { setPostContent, savePost, cancelWrite } = Hook();
 
     return (<div>
-        <Editor />
+      <Editor setPostContent={setPostContent} />
           <div className="fixed bottom-4 left-0 w-full px-4 flex flex-col sm:flex-row sm:justify-center sm:gap-8 gap-3">
       <button
         onClick={cancelWrite}

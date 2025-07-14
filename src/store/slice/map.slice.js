@@ -23,7 +23,6 @@ const mapSlice = createSlice({
 			state.isLoading = true;
 		});
 		builder.addCase(getLatLng.fulfilled, (state, action) => {
-			console.log('action', action);
 			state.isLoading = false;
 			state.isSuccess = true;
 			state.markerList = action.payload;

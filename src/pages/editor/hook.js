@@ -1,15 +1,17 @@
+import { useState } from "react";
 import { instanceForJSON } from "../../api/instance";
 
 export default function Hook(){
 
-    var isSavingPostInProgress = false;
 
-    const savePost =async ()=>{
-        console.log("post is saved and ready to leave this page");
-        isSavingPostInProgress = true;
-        const res = await instanceForJSON.post("/backpanel/post/create",{header:"ninja is activated",content:"Ninja is coming back",publish:true});
-        console.log("res is ",res);
+    const [post, setPost] = useState({ publish: true, header: "this title unique by suffix" });
 
+    const setPostContent = (type, data) => {
+        setPost({ ...post, [type]: data });
+    }
+
+    const savePost = async () => {
+        const res = await instanceForJSON.post("/backpanel/post/create", post);
 
     }
 
@@ -18,7 +20,7 @@ export default function Hook(){
     }
 
     return {
-        savePost, cancelWrite
+        post, setPostContent, savePost, cancelWrite
     }
     
 }

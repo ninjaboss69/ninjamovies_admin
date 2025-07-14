@@ -47,6 +47,21 @@ async function requestInterceptor(config) {
 	return config;
 }
 
+
+async function responseInterceptorSuccess(response) {
+
+	return response
+}
+
+async function responseInterceptorError(error) {
+	try {
+		const res = error.response;
+		if (res.status === 401) window.location.href = "/login"
+	} catch (err) {
+		window.location.href = "/login";
+	}
+}
+
 // Create instances
 export const instanceForJSON = axios.create({
 	baseURL: appconfig.api_url,
@@ -65,3 +80,5 @@ export const instanceForMultipart = axios.create({
 // Add request interceptor
 instanceForJSON.interceptors.request.use(requestInterceptor);
 instanceForMultipart.interceptors.request.use(requestInterceptor);
+instanceForJSON.interceptors.response.use(responseInterceptorSuccess, responseInterceptorError)
+instanceForMultipart.interceptors.response.use(responseInterceptorSuccess, responseInterceptorError)

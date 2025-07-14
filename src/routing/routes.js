@@ -46,18 +46,24 @@ export const routes = [
 				key: 2,
 				path: '/support',
 				element: (
-					<Suspense fallback={<div>Loading Support Page...</div>}>
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Support Page...</div>}>
 						<Support />
-					</Suspense>
+						</Suspense>
+					</ProtectedRoute>
+
 				),
 			},
 			{
 				key: 3,
 				path: '/report',
 				element: (
-					<Suspense fallback={<div>Loading Report Page...</div>}>
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Report Page...</div>}>
 						<Report />
 					</Suspense>
+					</ProtectedRoute>
+
 				),
 			},
 
