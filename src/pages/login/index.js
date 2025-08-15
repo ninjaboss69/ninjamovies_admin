@@ -1,70 +1,131 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { appconfig } from '../../config';
-
+import { Eye, EyeClosed } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import LoginImage from '../../../public/login.jpg'
 const LoginPage = () => {
-	const [username, setUserName] = useState('');
-	const [password, setPassword] = useState('');
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		setFocus,
+	} = useForm();
 
-		try{
-		const res  = await axios.post(`${appconfig.api_url}/backpanel/login-admin`,{username,password},
-			{
- withCredentials: true
-});
-		if(!res.data.accessToken){
-			throw Error("Login Failed")
+	const [isShownPassword, setIsShownPassword] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const navigate = useNavigate()
+
+	const onSubmit = async (values) => {
+
+		setIsLoading(true)
+		try {
+			const res = await axios.post(`${appconfig.api_url}/backpanel/login-admin`, values,
+				{
+					withCredentials: true
+				});
+			if (!res.data.accessToken) {
+				throw Error("Login Failed")
+			}
+			const accessToken = res.data.accessToken;
+			localStorage.setItem("accessToken", accessToken);
+			navigate('/')
+			setIsLoading(false)
+		} catch (err) {
+			console.log("Login Failed");
+			console.log(err.message);
+			// toast(err.message || "Something went wrong", {
+			// 	type: "error",
+			// });
+			setIsLoading(false)
 		}
-		const accessToken = res.data.accessToken;
-		localStorage.setItem("accessToken",accessToken);
-		}catch(err){
-		console.log("Login Failed");
-		console.log(err.message);
-		}
-		
+
 	};
 
+	useEffect(() => {
+		setFocus("username");
+	}, []);
+
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100">
-			<div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-				<h2 className="text-2xl font-bold text-center">Login</h2>
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div>
-						<label htmlFor="username" className="block text-sm font-medium text-gray-700">
-							Username
-						</label>
-						<input
-							type="text"
-							id="username"
-							value={username}
-							onChange={(e) => setUserName(e.target.value)}
-							required
-							className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-						/>
-					</div>
-					<div>
-						<label htmlFor="password" className="block text-sm font-medium text-gray-700">
-							Password
-						</label>
-						<input
-							type="password"
-							id="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							required
-							className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-						/>
-					</div>
-					<button
-						type="submit"
-						className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200"
-					>
-						Login
-					</button>
-				</form>
+		<div className="w-full min-h-[calc(100vh-60px)] flex  flex-col items-center justify-center  ">
+			{isLoading && <div>Loading .....</div>}
+			<div className='w-[70%] p-8 flex items-center justify-between bg-white  shadow-lg rounded-xl'>
+				<img
+					src={LoginImage}
+					className=" basis-1/2 w-1/2 p-8"
+					width={400}
+					height={400}
+				/>
+				<div className="basis-1/2 w-1/2  space-y-6  flex flex-col items-center ">
+					<h2 className="text-2xl font-bold text-center">Login</h2>
+					<form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-[400px]">
+						<div>
+							<label htmlFor="username" className="block text-sm font-medium text-gray-700">
+								Username
+							</label>
+							<input
+								type="text"
+								id="username"
+								{...register("username", {
+									required: "Username is required",
+								})}
+								className="w-full px-3 py-2 mt-1 border border-gray-400 focus:border-0  rounded-md focus:outline-none focus:ring focus:ring-blue-500"
+							/>
+							{errors.username && <p className='text-red-600 mt-1'>{errors.username.message}</p>}
+						</div>
+						<div>
+							<label htmlFor="password" className="block text-sm font-medium text-gray-700">
+								Password
+							</label>
+							<div className='w-full flex items-center justify-between relative '>
+								<input
+									type={isShownPassword ? "text" : "password"}
+									id="password"
+									{...register("password", {
+										required: "Password is required",
+									})}
+									className="w-full px-3 py-2 mt-1  rounded-md focus:border-0  focus:outline-none focus:ring focus:ring-blue-500 border border-gray-400"
+								/>
+								<button
+									type="button"
+									className="absolute top-4 right-5 laptop:cursor-pointer"
+									onClick={() => setIsShownPassword((curr) => !curr)}
+								>
+									{
+										isShownPassword ? (
+
+											<Eye size={20} className="text-gray-600" />
+										) : (
+
+											<EyeClosed size={20} className="text-gray-600" />
+										)
+									}
+								</button>
+							</div>
+							{errors.password && <p className='text-red-600 mt-1'>{errors.password.message}</p>}
+						</div>
+						<div>
+
+							<button
+								type="submit"
+								className="w-full btn overflow-hidden rounded-md  mt-1 border font-semibold uppercase leading-none tracking-wider relative bg-blue-600 border-blue-600 "
+							>
+								<span className="absolute inset-0 bg-[#FFFFFF]" />
+								<span className="absolute inset-0 flex items-center justify-center text-white hover:text-black">
+									Login
+								</span>
+								<div className="py-3 ">
+
+									Login
+								</div>
+							</button>
+						</div>
+					</form>
+				</div>
 			</div>
+
 		</div>
 	);
 };

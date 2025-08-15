@@ -4,6 +4,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
 
+body {
+	background-color: #f3f3f3;
+}
+
 /* Customized scrollbar */
 ::-webkit-scrollbar {
 	width: 4px;
@@ -50,6 +54,16 @@ input:not(:placeholder-shown) ~ label {
 input:focus ~ label {
 	@apply text-black;
 	@apply left-0;
+}
+
+.btn span:first-child {
+  transform: translateX(-101%);
+  transition: transform 0.3s ease-in;
+  color: #fff;
+}
+
+.btn:hover span {
+  transform: translateX(0);
 }
 
 @layer utilities {
