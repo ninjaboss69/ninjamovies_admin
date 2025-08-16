@@ -1,28 +1,91 @@
+import React, { useState } from "react";
 import Editor from "../../component/editor";
-import Hook from "./hook";
+import { instanceForMultipart } from "../../api/instance";
+import { toast, ToastContainer } from "react-toastify";
+import FormModal from "../../component/common/form/FormModal";
+import PostForm from "../../component/post/PostForm";
+const Write = () => {
 
-function Write() {
+  const [isOpenCreate, setIsOpenCreate] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const defaultData = {
+    imagefile: "",
+    title: "",
+    tags: [],
+    content: '',
+    publish: false,
+  };
+
+  const [data, setData] = useState(defaultData);
+  const savePost = async (postData) => {
+    const formData = new FormData();
+    formData.append("publish", true);
+    formData.append('header', 'this title');
+    formData.append('tags', JSON.stringify(["ninja", "boss"]));
+    if (postData.imagefile instanceof FileList) {
+      formData.append("imagefile", postData.imagefile[0]);
+    } else if (postData.imagefile instanceof File) {
+      formData.append("imagefile", postData.imagefile);
+    }
+    formData.append('content', postData.content)
 
 
-  const { setPostContent, savePost, cancelWrite } = Hook();
+    await instanceForMultipart
+      .post("/backpanel/post/create", formData)
+      .then((res) => {
 
-    return (<div>
-      <Editor setPostContent={setPostContent} />
-          <div className="fixed bottom-4 left-0 w-full px-4 flex flex-col sm:flex-row sm:justify-center sm:gap-8 gap-3">
+        toast(res?.data?.message, { type: "success" });
+      })
+      .catch((error) => {
+        toast(res?.data?.message, { type: "error" });
+      });
+
+  }
+  return (
+    <div className="container mx-auto">
       <button
-        onClick={cancelWrite}
-        className="w-full sm:w-36 bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-xl shadow-md hover:bg-gray-300 transition"
+        type='submit'
+        onClick={()=>setIsOpenCreate(true)}
+        className="mt-6 w-fit bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition "
       >
-        Cancel
+        CREATE
       </button>
-      <button
-        onClick={savePost}
-        className="w-full sm:w-36 bg-blue-600 text-white font-medium py-2 px-4 rounded-xl shadow-md hover:bg-blue-700 transition"
+      <ToastContainer autoClose={3000} />
+      <FormModal
+        isOpen={isOpenCreate}
+        header="Create Post"
+        onClose={() => {
+          setIsOpenCreate(false);
+        }}>
+        <PostForm
+          id="create_form"
+          onClose={() => {
+            setIsOpenCreate(false);
+          }}
+          onConfirm={(formdata) => savePost(formdata)}
+        />
+      </FormModal>
+      <FormModal
+        isOpen={isOpenEdit}
+        onClose={() => {
+          setIsOpenEdit(false);
+        }}
+        header="Edit Post"
       >
-        Save
-      </button>
-    </div>
+        <PostForm
+          id="edit_form"
+          formData={data}
+          onClose={() => {
+            setData({
+              ...defaultData,
+            });
+            setIsOpenEdit(false);
+          }}
+          onConfirm={(data) => savePost(data,)}
+        />
+      </FormModal>
     </div>)
+
 }
 
 export default Write;
