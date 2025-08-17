@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "header": "this is header",
+      "title": "this is title",
+      "content": "this is content",
+        "publish": true,
+        "tags": ["tag1", "tag2"],
+        "imagefile": "/blog-banner-images/070bd153-5645-4973-801b-92fc67796c3e-Screenshot2025-07-22 at 20.36.43.png"
+    }
+  ],
+  "column": [
+    {
+      "accessor": "header",
+      "Header": "Header"
+    },{
+      "accessor": "title",
+      "Header": "Title"
+    },
+    {
+      "accessor": "content",
+      "Header": "Content"
+    },
+    {
+      "accessor": "publish",
+      "Header": "Publish"
+    },
+        {
+        "accessor": "tags",
+        "Header": "Tags"
+        },
+         {
+      "accessor": "imagefile",
+      "Header": "Image File"
+    }
+
+  ]
+}
