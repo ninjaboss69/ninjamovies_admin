@@ -4,6 +4,8 @@ import { instanceForMultipart } from "../../api/instance";
 import { toast, ToastContainer } from "react-toastify";
 import FormModal from "../../component/common/form/FormModal";
 import PostForm from "../../component/post/PostForm";
+import Table from "../../component/common/table/Table";
+import sampledata from "../../../src/data/data.json"
 const Write = () => {
 
   const [isOpenCreate, setIsOpenCreate] = useState(false);
@@ -17,6 +19,8 @@ const Write = () => {
   };
 
   const [data, setData] = useState(defaultData);
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(10);
   const savePost = async (postData) => {
     const formData = new FormData();
     formData.append("publish", true);
@@ -43,6 +47,7 @@ const Write = () => {
   }
   return (
     <div className="container mx-auto">
+      
       <button
         type='submit'
         onClick={()=>setIsOpenCreate(true)}
@@ -50,6 +55,16 @@ const Write = () => {
       >
         CREATE
       </button>
+      {/* <Table
+dataRows={sampledata.data||[]}
+dataColumns={sampledata.column||[]}
+totalItems={0}
+pagination
+page={page}
+setPage={setPage}
+limit={limit}
+setLimit={setLimit}
+      /> */}
       <ToastContainer autoClose={3000} />
       <FormModal
         isOpen={isOpenCreate}
@@ -81,7 +96,7 @@ const Write = () => {
             });
             setIsOpenEdit(false);
           }}
-          onConfirm={(data) => savePost(data,)}
+          onConfirm={(data) => savePost(data,data.id)}
         />
       </FormModal>
     </div>)

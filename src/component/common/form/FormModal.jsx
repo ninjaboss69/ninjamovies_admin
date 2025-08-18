@@ -17,7 +17,7 @@ const FormModal = ({ isOpen, onClose, header, children }) => {
                     onClick={onClose}
                 >
                     <motion.div
-                        className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-[50%] h-[80%]  max-h-[80%]   "
+                        className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-[60%] h-[80%]  max-h-[80%]   "
                         initial={{ scale: 0.95, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.95, opacity: 0 }}
