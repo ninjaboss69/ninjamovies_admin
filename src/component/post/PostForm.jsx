@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
@@ -5,8 +6,9 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { CustomUploadAdapterPlugin } from '../editor/CustomUploadAdapter';
 import { editorConfig } from '../editor/constant';
 import Input from '../common/form/Input';
-
-const PostForm = ({ id, onClose, onConfirm }) => {
+import { appconfig } from '../../config';
+const PostForm = ({ id, formData, onConfirm }) => {
+    console.log('formData', formData)
     const {
         handleSubmit,
         register,
@@ -16,7 +18,11 @@ const PostForm = ({ id, onClose, onConfirm }) => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            tags: [{ value: "" }],
+            publish: id === 'edit_form' ? formData.publish : false,
+            content: id === 'edit_form' ? formData.content : "",
+            imagefile: id === 'edit_form' ? formData.imagefile : "",
+            header: id === 'edit_form' ? formData.header : '',
+            tags: id === 'edit_form' ? formData.tags.map((tag) => ({ value: tag })) : [{ value: "" }],
         },
     })
     const { fields, append, remove } = useFieldArray({
@@ -24,7 +30,13 @@ const PostForm = ({ id, onClose, onConfirm }) => {
         name: "tags",
     });
 
+    useEffect(() => {
+        if (id === "edit_form") {
+            const preview = document.getElementById("post-image-preview");
 
+            preview.src = `${appconfig.api_url}/bucket${formData?.imagefile}`;
+        }
+    }, [id]);
     const onUpload = async (e) => {
         const file = e.target.files[0];
 
@@ -56,8 +68,8 @@ const PostForm = ({ id, onClose, onConfirm }) => {
             <div >
                 <Input
                     placeholder='Title'
-                    label='Title'
-                    name="title"
+                    label='Header'
+                    name="header"
                     validate={{ required: true }}
                     register={register}
                     errors={errors}
@@ -70,28 +82,35 @@ const PostForm = ({ id, onClose, onConfirm }) => {
                     <button
                         type="button"
                         onClick={() => append({ value: "" })}
-                        className="px-2 py-1 bg-blue-600 text-white rounded text-[12px]"
+                        className="px-2 py-1 bg-blue-600 text-white rounded text-[14px]"
                     >
                         Add Tag
                     </button>
                 </div>
-                {fields.map((field, index) => (
-                    <div key={field.id} className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            {...register(`tags.${index}.value`, { required: "Tag required" })}
-                            placeholder="Tag"
-                            className="border px-2 py-1 rounded w-full"
-                        />
-                        <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="px-2 py-1 bg-red-500 text-white rounded text-[12px]"
-                        >
-                            Remove
-                        </button>
-                    </div>
-                ))}
+                <div className='flex flex-col gap-2'>
+
+                    {fields.map((field, index) => (
+
+                        <div key={field.id} className='flex items-center justify-center w-full space-x-2 '>
+                            <input
+                                type="text"
+                                {...register(`tags.${index}.value`, { required: "Tag required" })}
+                                placeholder="Tag"
+                                className="border px-2 py-1 rounded w-full"
+                            />
+
+
+                            <button
+                                type="button"
+                                onClick={() => remove(index)}
+                                className="px-2 py-1 bg-red-500 text-white rounded text-[14px]"
+                            >
+                                Remove
+                            </button>
+                        </div>
+
+                    ))}
+                </div>
 
 
             </div>
@@ -104,7 +123,7 @@ const PostForm = ({ id, onClose, onConfirm }) => {
                     licenseKey: editorConfig.licenseKey,
                     plugins: editorConfig.plugins,
                     toolbar: editorConfig.toolbar,
-                    initialData: '<figure class="image image_resized" style="width:19.47%;"><img style="aspect-ratio:2520/1680;" src="http://localhost:5000/bucket/ninja-images/80da8667-1b77-4884-b699-0d07bea896e4-5a4030a0-cde2-45d0-be60-ac6d0f205acb-Photoon11-06-2025 at 11.24.jpg" width="2520" height="1680"></figure>',
+
                     htmlSupport: {
                         allow: [
                             {
@@ -116,6 +135,8 @@ const PostForm = ({ id, onClose, onConfirm }) => {
                         ]
                     }
                 }}
+                data={id === "edit_form" ? formData.content : ""}
+                onReady={(editor) => { editor.editing.view.change((writer) => { writer.setStyle("min-height", "200px", editor.editing.view.document.getRoot()); }); }}
                 onChange={(event, editor) => {
                     const data = editor.getData();
                     setValue("content", data);

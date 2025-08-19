@@ -11,27 +11,27 @@
   ],
   "column": [
     {
-      "accessor": "header",
-      "Header": "Header"
+      "accessorKey": "header",
+      "header": "Header"
     },{
-      "accessor": "title",
-      "Header": "Title"
+      "accessorKey": "title",
+      "header": "Title"
     },
     {
-      "accessor": "content",
-      "Header": "Content"
+      "accessorKey": "content",
+      "header": "Content"
     },
     {
-      "accessor": "publish",
-      "Header": "Publish"
+      "accessorKey": "publish",
+      "header": "Publish"
     },
         {
-        "accessor": "tags",
-        "Header": "Tags"
+        "accessorKey": "tags",
+        "header": "Tags"
         },
          {
-      "accessor": "imagefile",
-      "Header": "Image File"
+      "accessorKey": "imagefile",
+      "header": "Image File"
     }
 
   ]

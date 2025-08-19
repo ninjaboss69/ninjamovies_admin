@@ -66,6 +66,43 @@ input:focus ~ label {
   transform: translateX(0);
 }
 
+.table_style {
+  min-width: 100%;
+}
+
+.table_head_row {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.table_head_column {
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+  text-align: left;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+
+.table_body > tr {
+  background-color: rgb(255, 255, 255);
+  border-top-width: 1px;
+  border-bottom-width: 0px;
+}
+
+.table_body > tr > td {
+  text-align: center;
+}
+
+
+
+.ck-content figure.image {
+  display: block;
+  max-width: 300px; 
+  max-height: 300px;
+}
+
+
 @layer utilities {
 }
 
