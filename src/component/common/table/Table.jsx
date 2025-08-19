@@ -1,81 +1,186 @@
-import React from "react";
-import { useTable,useExpanded,useSortBy,useColumnOrder } from "react-table";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import {
+    useReactTable,
+    getCoreRowModel,
+    getSortedRowModel,
+    getPaginationRowModel,
+    flexRender,
+} from "@tanstack/react-table";
+import { TbChevronsRight } from "react-icons/tb";
+import Expand from "./Expand";
+import Pagination from "./Pagination";
 
+const Table = ({ columns, dataRows,page,setPage,limit,setLimit, totalItems }) => {
 
-const Table = ({ dataColumns, dataRows, onRowClick }) => {
-    console.log('columns', dataColumns, 'rows', dataRows);
-    const columns = React.useMemo(() => dataColumns, [dataColumns]);
-    const data = React.useMemo(() => dataRows, [dataRows]);
-    const tableInstance = useTable({
-    columns,
-    data,
-    manualPagination: true,
-    // initialState: {hiddenColumns}
-},
-     useSortBy, useExpanded
+    const wrapperRef = useRef(null);
+    const [visibleColumns, setVisibleColumns] = useState(columns);
+    const [hiddenColumns, setHiddenColumns] = useState([]);
+    const [sorting, setSorting] = useState([]);
+    const [expanded, setExpanded] = useState({});
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+    useEffect(() => {
+        const updateColumnsVisibility = () => {
+            const wrapperWidth = wrapperRef.current?.offsetWidth || 0;
+            const columnMinWidth = 150;
+
+            let totalWidth = 0;
+            const visible = [];
+            const hidden = [];
+
+            for (let col of columns) {
+                const colWidth = col.width || columnMinWidth;
+                if (totalWidth + colWidth <= wrapperWidth) {
+                    visible.push(col);
+                    totalWidth += colWidth;
+                } else {
+                    hidden.push(col);
+                }
+            }
+            setVisibleColumns(visible);
+            setHiddenColumns(hidden);
+        };
+
+        updateColumnsVisibility();
+        window.addEventListener("resize", updateColumnsVisibility);
+        return () => window.removeEventListener("resize", updateColumnsVisibility);
+    }, [columns]);
+    const expanderColumn = useMemo(
+        () => ({
+            id: "expander",
+            header: ({ table }) => (
+                <button
+                    onClick={table.getToggleAllRowsExpandedHandler()}
+
+                    aria-label="Toggle All Rows Expanded"
+                >
+
+                    {table.getIsAllRowsExpanded() ? <TbChevronsRight className=" rotate-90" /> : <TbChevronsRight />}
+                </button>
+            ),
+            cell: ({ row }) => {
+                const handleClick = () => {
+                    row.toggleExpanded();
+                };
+                return (
+                    <button
+                        onClick={handleClick}
+                        style={{ cursor: "pointer" }}
+
+                        aria-label="Toggle Row Expanded"
+                    >
+                        {row.getIsExpanded() ? <TbChevronsRight className=" rotate-90" /> : <TbChevronsRight />}
+                    </button>
+                );
+            },
+            size: 40,
+        }),
+        []
     );
 
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = tableInstance;  
-    return(
+    const columnsWithExpander = useMemo(
+        () => [expanderColumn, ...visibleColumns],
+        [expanderColumn, visibleColumns]
+    );
 
-    <div>
-        <table className="min-w-full "  {...getTableProps()}>
-            <thead>
+    const data = useMemo(() => dataRows, [dataRows]);
 
-                {headerGroups.map(headerGroup => {
-                          const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
-                   return (
-                    <tr  key={key} {...restHeaderGroupProps} className="border-b border-gray-200">
-                        {headerGroup.headers.map(column => {
-                             const { key, ...restColumn } = column.getHeaderProps();
-                            return(
+    const table = useReactTable({
+        data,
+        columns: columnsWithExpander,
+        state: {
+            sorting,
+            expanded,
+            pagination,
+        },
+        onPaginationChange: setPagination,
+        onSortingChange: setSorting,
+        onExpandedChange: setExpanded,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getRowId: (row) => row._id,
+    });
 
-                            <th key={key}  {...restColumn} className="px-6 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {column.render('Header')}
-                                <span>
-                                    {column.isSorted
-                                        ? column.isSortedDesc
-                                            ? ' 🔽'
-                                            : ' 🔼'
-                                        : ''}
-                                </span>
-                            </th>
-                            )
-                        }
-                        )}
-                    </tr>
-                   ) 
-                }
-                    
-                )}
-                </thead>
-            <tbody  {...getTableBodyProps()}>
-                {rows.map(row => {
-                    prepareRow(row);
-                    const { key, ...restRowProps } = row.getRowProps();
-                    return (
-                        <tr key={key}  {...restRowProps} onClick={() => onRowClick(row.original)}>
-                            {row.cells.map(cell => {
-                                const { key, ...restCellProps } = cell.getCellProps();
-                                return (
-                                <td  key={key} {...restCellProps} className="px-6 py-4 whitespace-nowrap border-b border-gray-200">
-                                    {cell.render('Cell')}
-                                </td>
-                                )
-                            }
-                )}
-                        </tr>
-                    );
-                })}
-            </tbody>
-            </table>
-    </div>
+
+    return (
+        <>
+            <div ref={wrapperRef}>
+                <table className="min-w-full "  >
+                    <thead>
+
+
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <th
+                                        key={header.id}
+                                        className="border-b border-gray-300 p-2 text-left cursor-pointer select-none"
+                                        onClick={header.column.getToggleSortingHandler()}
+                                        style={{ width: header.getSize() || 150 }}
+                                    >
+                                        {flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                        {{
+                                            asc: " 🔼",
+                                            desc: " 🔽",
+                                        }[header.column.getIsSorted()] ?? null}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody>
+                        {table.getRowModel().rows.map((row) => {
+                            const isExpanded = row.getIsExpanded();
+                            return (
+                                <React.Fragment key={row.id}>
+                                    <tr
+                                        className={`border-b border-gray-200 hover:bg-green-100 even:bg-gray-100`}
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <td
+                                                key={cell.id}
+                                                className="p-2"
+                                                style={{ width: cell.column.getSize() || 150 }}
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                    {/* Render hidden columns when row is expanded */}
+                                    {isExpanded && hiddenColumns.length > 0 && (
+                                        <tr className="bg-gray-50">
+                                            <td
+                                                colSpan={row.getVisibleCells().length}
+                                                className="p-4 text-sm text-gray-700"
+                                            >
+                                                <Expand hiddenColumns={hiddenColumns} data={row.original} />
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+            <Pagination
+                page={page}
+                setPage={setPage}
+                limit={limit}
+                setLimit={setLimit}
+                totalItems={totalItems}
+            />
+        </>
     )
 }
 

@@ -1,7 +1,8 @@
 var config = {
 	Development: {
 		env: 'Development',
-		api_url: 'http://uniqenviron.com:5000',
+		// api_url: 'http://uniqenviron.com:5000',
+		api_url: 'https://uniqenviron.com/api',
 		// Please block different origin in google console
 		map_api: 'AIzaSyCzJIBmzqAbD6_AUcGtyQzJTciBK1dhr78',
 		map_style_id: 'b181cac70f27f5e6',

@@ -10,9 +10,12 @@ class MyUploadAdapter {
     async singleFileUpload(file) {
 
         const imageLink = await uploadImageToServer(file);
+        console.log('single file', imageLink, 'return', `${appconfig.api_url}/bucket${imageLink}`)
         return `${appconfig.api_url}/bucket${imageLink}`
 
     }
+
+    
 
 
     async upload() {
