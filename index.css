@@ -41,70 +41,76 @@ input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
+
 /* Firefox */
 input[type='number'] {
 	-moz-appearance: textfield;
 }
-input:focus ~ label,
-input:not(:placeholder-shown) ~ label {
+
+input:focus~label,
+input:not(:placeholder-shown)~label {
 	@apply transform;
 	@apply scale-75;
 	@apply -translate-y-6;
 }
-input:focus ~ label {
+
+input:focus~label {
 	@apply text-black;
 	@apply left-0;
 }
 
 .btn span:first-child {
-  transform: translateX(-101%);
-  transition: transform 0.3s ease-in;
-  color: #fff;
+	transform: translateX(-101%);
+	transition: transform 0.3s ease-in;
+	color: #fff;
 }
 
 .btn:hover span {
-  transform: translateX(0);
+	transform: translateX(0);
 }
 
 .table_style {
-  min-width: 100%;
+	min-width: 100%;
 }
 
 .table_head_row {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
 }
 
 .table_head_column {
-  padding-top: 0.9rem;
-  padding-bottom: 0.9rem;
-  text-align: left;
-  text-transform: capitalize;
-  text-align: center;
+	padding-top: 0.9rem;
+	padding-bottom: 0.9rem;
+	text-align: left;
+	text-transform: capitalize;
+	text-align: center;
 }
 
 
-.table_body > tr {
-  background-color: rgb(255, 255, 255);
-  border-top-width: 1px;
-  border-bottom-width: 0px;
+.table_body>tr {
+	background-color: rgb(255, 255, 255);
+	border-top-width: 1px;
+	border-bottom-width: 0px;
 }
 
-.table_body > tr > td {
-  text-align: center;
+.table_body>tr>td {
+	text-align: center;
 }
 
 
 
 .ck-content figure.image {
-  display: block;
-  max-width: 300px; 
-  max-height: 300px;
+	display: block;
+	max-width: 300px;
+	max-height: 300px;
 }
 
-
-@layer utilities {
+.nav-bar {
+	background-image: linear-gradient(to right,#6baed6, #fffafa, #6baed6);
+	
 }
+
+@layer utilities {}
 
 @layer base {
 	:root {
