@@ -5,6 +5,7 @@ import { Eye, EyeClosed } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import LoginImage from '../../../public/login.jpg'
+import { ToastContainer,toast } from 'react-toastify';
 const LoginPage = () => {
 
 	const {
@@ -19,7 +20,7 @@ const LoginPage = () => {
 	const navigate = useNavigate()
 
 	const onSubmit = async (values) => {
-
+		
 		setIsLoading(true)
 		try {
 			const res = await axios.post(`${appconfig.api_url}/backpanel/login-admin`, values,
@@ -31,14 +32,17 @@ const LoginPage = () => {
 			}
 			const accessToken = res.data.accessToken;
 			localStorage.setItem("accessToken", accessToken);
-			navigate('/')
+			toast(res.message , {
+				type: "success",
+			});
+			navigate('/editor')
 			setIsLoading(false)
 		} catch (err) {
 			console.log("Login Failed");
 			console.log(err.message);
-			// toast(err.message || "Something went wrong", {
-			// 	type: "error",
-			// });
+			toast(err.message , {
+				type: "error",
+			});
 			setIsLoading(false)
 		}
 
@@ -61,6 +65,7 @@ const LoginPage = () => {
 				</div>
 			}
 			<div className='w-[70%]  p-8 flex items-center justify-between bg-white  shadow-xl rounded-xl fixed'>
+				<ToastContainer autoClose={3000} />
 				<img
 					src={LoginImage}
 					className=" basis-1/2 w-1/2 p-8"

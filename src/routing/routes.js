@@ -7,6 +7,7 @@ import ProtectedRoute from '../hook/Auth';
 const Home = lazy(() => import('../pages/home'));
 const About = lazy(() => import('../pages/about-us'));
 const Support = lazy(() => import('../pages/support'));
+const FAQ =  lazy(() => import('../pages/faq'));
 const Report = lazy(() => import('../pages/report'));
 const Login = lazy(() => import('../pages/login'));
 const Write = lazy(() => import('../pages/editor'));
@@ -75,6 +76,18 @@ export const routes = [
 						<Suspense fallback={<div>Loading Editor Page...</div>}>
 							<Write />
 					</Suspense>
+					</ProtectedRoute>
+
+				),
+			},
+			{
+				key: 5,
+				path: '/faq',
+				element: (
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading FAQ Page...</div>}>
+						<FAQ />
+						</Suspense>
 					</ProtectedRoute>
 
 				),

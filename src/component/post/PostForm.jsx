@@ -8,7 +8,7 @@ import { editorConfig } from '../editor/constant';
 import Input from '../common/form/Input';
 import { appconfig } from '../../config';
 const PostForm = ({ id, formData, onConfirm }) => {
-    console.log('formData', formData)
+
     const {
         handleSubmit,
         register,
@@ -52,6 +52,24 @@ const PostForm = ({ id, formData, onConfirm }) => {
 
         onConfirm(formData)
     }
+    const [token, setToken] = useState(null);
+
+    useEffect(() => {
+        const fetchToken = async () => {
+            try {
+                const response = await axios.get(`${appconfig.api_url}/backpanel/swap-token`, {
+                    withCredentials: true,
+                });
+                const { accessToken } = response.data.tokens;
+                setToken(accessToken);
+            } catch (err) {
+                window.location.href = "/login"; 
+            }
+        };
+
+        fetchToken();
+    }, []);
+    if(!token) return;
     return (
         <form className='w-full flex flex-col gap-4 ' onSubmit={handleSubmit(onSubmit)} >
             {/* publish */}
