@@ -49,9 +49,18 @@ const LoginPage = () => {
 	}, []);
 
 	return (
-		<div className="w-full min-h-[calc(100vh-60px)] flex  flex-col items-center justify-center  ">
-			{isLoading && <div>Loading .....</div>}
-			<div className='w-[70%] p-8 flex items-center justify-between bg-white  shadow-lg rounded-xl'>
+		<div className="w-full min-h-[calc(100vh-60px)] max-h-[calc(100vh-60px)] flex  flex-col items-center justify-center  ">
+			{isLoading &&
+				<div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
+					<div className="flex flex-col items-center space-y-2">
+
+						<div className="w-16 h-16 border-4 border-t-[#6baed6] border-b-[#3182ce] border-l-[#63b3ed] border-r-[#90cdf4] rounded-full animate-spin"></div>
+
+						<span className="text-[#6baed6] font-semibold">Loading...</span>
+					</div>
+				</div>
+			}
+			<div className='w-[70%]  p-8 flex items-center justify-between bg-white  shadow-xl rounded-xl fixed'>
 				<img
 					src={LoginImage}
 					className=" basis-1/2 w-1/2 p-8"
@@ -110,7 +119,7 @@ const LoginPage = () => {
 
 							<button
 								type="submit"
-								className="w-full btn overflow-hidden rounded-md  mt-1 border font-semibold uppercase leading-none tracking-wider relative bg-blue-600 border-blue-600 "
+								className="w-full btn overflow-hidden rounded-md  mt-1 border font-semibold uppercase leading-none tracking-wider relative bg-[#6baed6] "
 							>
 								<span className="absolute inset-0 bg-[#FFFFFF]" />
 								<span className="absolute inset-0 flex items-center justify-center text-white hover:text-black">
