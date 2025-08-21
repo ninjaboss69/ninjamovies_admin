@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
@@ -52,24 +52,47 @@ const PostForm = ({ id, formData, onConfirm }) => {
 
         onConfirm(formData)
     }
-    const [token, setToken] = useState(null);
 
+    function isTokenExpired(token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+            return payload.exp < currentTime;
+        } catch (e) {
+            return true;
+        }
+    }
+    const [token, setToken] = useState(null);
     useEffect(() => {
-        const fetchToken = async () => {
-            try {
-                const response = await axios.get(`${appconfig.api_url}/backpanel/swap-token`, {
-                    withCredentials: true,
-                });
-                const { accessToken } = response.data.tokens;
-                setToken(accessToken);
-            } catch (err) {
-                window.location.href = "/login"; 
+        const initAuth = async () => {
+            let storedToken = localStorage.getItem("accessToken");
+
+            if (!storedToken) {
+                window.location.href = "/login";
+                return;
             }
+
+            if (isTokenExpired(storedToken)) {
+                try {
+                    const response = await axios.get(
+                        `${appconfig.api_url}/backpanel/swap-token`,
+                        { withCredentials: true }
+                    );
+                    storedToken = response.data.tokens.accessToken;
+                    localStorage.setItem("accessToken", storedToken);
+                } catch (err) {
+                    window.location.href = "/login";
+                    return;
+                }
+            }
+
+            setToken(storedToken);
+           
         };
 
-        fetchToken();
+        initAuth();
     }, []);
-    if(!token) return;
+    if (!token) return;
     return (
         <form className='w-full flex flex-col gap-4 ' onSubmit={handleSubmit(onSubmit)} >
             {/* publish */}
