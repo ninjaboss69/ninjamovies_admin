@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
@@ -29,29 +29,6 @@ const PostForm = ({ id, formData, onConfirm }) => {
         control,
         name: "tags",
     });
-
-    useEffect(() => {
-        if (id === "edit_form") {
-            const preview = document.getElementById("post-image-preview");
-
-            preview.src = `${appconfig.api_url}/bucket${formData?.imagefile}`;
-        }
-    }, [id]);
-    const onUpload = async (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            setValue("imagefile", file);
-            const url = URL.createObjectURL(file);
-            const preview = document.getElementById("post-image-preview");
-            preview.src = url;
-        }
-    };
-
-    const onSubmit = (formData) => {
-
-        onConfirm(formData)
-    }
 
     function isTokenExpired(token) {
         try {
@@ -87,11 +64,47 @@ const PostForm = ({ id, formData, onConfirm }) => {
             }
 
             setToken(storedToken);
-           
+
         };
 
         initAuth();
     }, []);
+    useEffect(() => {
+        if (id === "edit_form" && token) {
+
+            const preview = document.getElementById("post-image-preview");
+
+            preview.src = `${appconfig.api_url}/bucket${formData?.imagefile}`;
+        }
+    }, [id, token]);
+
+
+
+    const onUpload = async (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            setValue("imagefile", file);
+            const url = URL.createObjectURL(file);
+            const preview = document.getElementById("post-image-preview");
+            preview.src = url;
+        }
+    };
+
+    // const previewRef = useRef(null);
+
+    // useEffect(() => {
+    //     if (id === "edit_form" && token && previewRef.current && formData?.imagefile) {
+    //         previewRef.current.src = `${appconfig.api_url}/bucket${formData.imagefile}`;
+    //     }
+    // }, [id, token, formData]);
+
+
+    const onSubmit = (formData) => {
+        onConfirm(formData)
+    }
+
+
     if (!token) return;
     return (
         <form className='w-full flex flex-col gap-4 ' onSubmit={handleSubmit(onSubmit)} >
@@ -206,6 +219,7 @@ const PostForm = ({ id, formData, onConfirm }) => {
 
                         <div className="flex items-center justify-center">
                             <img
+                                // ref={previewRef}
                                 id="post-image-preview"
                                 className="h-[250px] "
                                 alt="post_image"
@@ -215,6 +229,7 @@ const PostForm = ({ id, formData, onConfirm }) => {
                     </div>
                 </div>
             </div>
+
 
         </form>
     )
