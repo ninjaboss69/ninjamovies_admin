@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import 'ckeditor5/ckeditor5.css';
 import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { CustomUploadAdapterPlugin } from '../editor/CustomUploadAdapter';
 import { editorConfig } from '../editor/constant';
 import Input from '../common/form/Input';
@@ -20,7 +20,7 @@ const PostForm = ({ id, formData, onConfirm }) => {
         defaultValues: {
             publish: id === 'edit_form' ? formData.publish : false,
             content: id === 'edit_form' ? formData.content : "",
-            imagefile: id === 'edit_form' ? formData.imagefile : "",
+            imagefile: id === 'edit_form' ? formData.imagefile : null,
             header: id === 'edit_form' ? formData.header : '',
             tags: id === 'edit_form' ? formData.tags.map((tag) => ({ value: tag })) : [{ value: "" }],
         },
@@ -29,6 +29,9 @@ const PostForm = ({ id, formData, onConfirm }) => {
         control,
         name: "tags",
     });
+    const [err, setErr] = useState("");
+    const [token, setToken] = useState(null);
+
 
     function isTokenExpired(token) {
         try {
@@ -39,7 +42,7 @@ const PostForm = ({ id, formData, onConfirm }) => {
             return true;
         }
     }
-    const [token, setToken] = useState(null);
+
     useEffect(() => {
         const initAuth = async () => {
             let storedToken = localStorage.getItem("accessToken");
@@ -99,13 +102,29 @@ const PostForm = ({ id, formData, onConfirm }) => {
     //     }
     // }, [id, token, formData]);
 
+    const imageFile = watch("imagefile");
+
+    useEffect(() => {
+        if (imageFile) {
+            setErr("");
+        }
+    }, [imageFile]);
 
     const onSubmit = (formData) => {
-        onConfirm(formData)
-    }
 
+        if (formData.imagefile == null)
+            setErr('This field is required')
+        else {
+
+            setErr('')
+            onConfirm(formData);
+        }
+
+    };
 
     if (!token) return;
+
+
     return (
         <form className='w-full flex flex-col gap-4 ' onSubmit={handleSubmit(onSubmit)} >
             {/* publish */}
@@ -124,7 +143,7 @@ const PostForm = ({ id, formData, onConfirm }) => {
                     placeholder='Title'
                     label='Header'
                     name="header"
-                    validate={{ required: true }}
+                    validate={{ required: true, }}
                     register={register}
                     errors={errors}
                 />
@@ -144,25 +163,33 @@ const PostForm = ({ id, formData, onConfirm }) => {
                 <div className='flex flex-col gap-2'>
 
                     {fields.map((field, index) => (
+                        <div
+                            key={field.id}
+                            className="flex flex-col w-full space-y-1"
+                        >
+                            <div className='flex items-center justify-center w-full space-x-2 '>
+                                <input
+                                    type="text"
+                                    {...register(`tags.${index}.value`, { required: "This field is required" })}
+                                    placeholder="Tag"
+                                    className="border px-2 py-1 rounded w-full"
+                                />
 
-                        <div key={field.id} className='flex items-center justify-center w-full space-x-2 '>
-                            <input
-                                type="text"
-                                {...register(`tags.${index}.value`, { required: "Tag required" })}
-                                placeholder="Tag"
-                                className="border px-2 py-1 rounded w-full"
-                            />
 
-
-                            <button
-                                type="button"
-                                onClick={() => remove(index)}
-                                className="px-2 py-1 bg-red-500 text-white rounded text-[14px]"
-                            >
-                                Remove
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                    className="px-2 py-1 bg-red-500 text-white rounded text-[14px]"
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                            {errors.tags?.[index]?.value && (
+                                <p className="text-red-600 text-sm">
+                                    {errors.tags[index].value.message}
+                                </p>
+                            )}
                         </div>
-
                     ))}
                 </div>
 
@@ -170,32 +197,45 @@ const PostForm = ({ id, formData, onConfirm }) => {
             </div>
             {/* content */}
             <label className="mb-2  font-semibold">Content</label>
-            <CKEditor
-                editor={editorConfig.editor}
-                config={{
-                    extraPlugins: [CustomUploadAdapterPlugin],
-                    licenseKey: editorConfig.licenseKey,
-                    plugins: editorConfig.plugins,
-                    toolbar: editorConfig.toolbar,
+            <Controller
+                name="content"
+                control={control}
+                rules={{ required: "This field is required" }}
+                render={({ field }) => (
+                    <div className=''>
+                        <CKEditor
+                            editor={editorConfig.editor}
+                            config={{
+                                extraPlugins: [CustomUploadAdapterPlugin],
+                                licenseKey: editorConfig.licenseKey,
+                                plugins: editorConfig.plugins,
+                                toolbar: editorConfig.toolbar,
 
-                    htmlSupport: {
-                        allow: [
-                            {
-                                name: "img",
-                                attributes: true,
-                                classes: true,
-                                styles: true
-                            }
-                        ]
-                    }
-                }}
-                data={id === "edit_form" ? formData.content : ""}
-                onReady={(editor) => { editor.editing.view.change((writer) => { writer.setStyle("min-height", "200px", editor.editing.view.document.getRoot()); }); }}
-                onChange={(event, editor) => {
-                    const data = editor.getData();
-                    setValue("content", data);
-                }}
+                                htmlSupport: {
+                                    allow: [
+                                        {
+                                            name: "img",
+                                            attributes: true,
+                                            classes: true,
+                                            styles: true
+                                        }
+                                    ]
+                                }
+                            }}
+                            data={id === "edit_form" ? formData.content : ""}
+                            onReady={(editor) => { editor.editing.view.change((writer) => { writer.setStyle("min-height", "200px", editor.editing.view.document.getRoot()); }); }}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setValue("content", data, { shouldValidate: true });
+                            }}
+                        />
+                        {errors.content && (
+                            <p className="text-red-500 text-sm ">{errors.content.message}</p>
+                        )}
+                    </div>
+                )}
             />
+
 
             {/* image upload */}
             <div className="w-full mx-auto">
@@ -211,7 +251,7 @@ const PostForm = ({ id, formData, onConfirm }) => {
                         type="file"
                         accept="image/*"
                         onChange={onUpload}
-                        className='border border-slate-700'
+                        className='border border-slate-700 cursor-pointer'
                     />
                     <p className="text-orange-600">Recommended resolution is 500 x 400</p>
 
@@ -228,6 +268,9 @@ const PostForm = ({ id, formData, onConfirm }) => {
 
                     </div>
                 </div>
+                {err && (
+                    <p className="text-red-500 text-sm mt-1">{err}</p>
+                )}
             </div>
 
 
