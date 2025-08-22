@@ -45,6 +45,6 @@
 	},
 	"scripts": {
 		"start": "webpack serve",
-		"prod": "webpack --mode production && copy assets\\con_cc.svg build\\icon.svg"
+		"prod": "webpack --mode production && cp assets/logo.png build/logo.png"
 	}
 }
