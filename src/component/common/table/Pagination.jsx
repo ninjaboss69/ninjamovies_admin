@@ -1,5 +1,5 @@
 
-const Pagination = ({ page, setPage, limit, setLimit, totalItems }) => {
+const Pagination = ({ page, setPage, limit, setLimit, totalItems, label }) => {
     const totalPages = Math.ceil(totalItems / limit);
 
     const handlePrev = () => {
@@ -11,7 +11,7 @@ const Pagination = ({ page, setPage, limit, setLimit, totalItems }) => {
     };
 
     return (
-        <div className="flex justify-between items-center mt-4 px-2">
+        <div className="flex justify-between items-center mt-4 border-t px-2 py-2">
             <div className="flex gap-2 items-center">
                 <button
                     onClick={handlePrev}
@@ -31,6 +31,13 @@ const Pagination = ({ page, setPage, limit, setLimit, totalItems }) => {
                     Next
                 </button>
             </div>
+            <div>
+                <span className="border px-4 py-2 rounded border-blue-500">
+                    {(page - 1) * limit + 1} – {Math.min(page * limit, totalItems)}
+                </span>{" "}
+                of <span>{totalItems}</span> {label}
+            </div>
+
             <div>
                 <select
                     value={limit}

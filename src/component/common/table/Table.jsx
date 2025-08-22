@@ -10,7 +10,7 @@ import { TbChevronsRight } from "react-icons/tb";
 import Expand from "./Expand";
 import Pagination from "./Pagination";
 
-const Table = ({ columns, dataRows,page,setPage,limit,setLimit, totalItems }) => {
+const Table = ({ columns, dataRows,page,setPage,limit,setLimit, totalItems,label }) => {
 
     const wrapperRef = useRef(null);
     const [visibleColumns, setVisibleColumns] = useState(columns);
@@ -108,7 +108,7 @@ const Table = ({ columns, dataRows,page,setPage,limit,setLimit, totalItems }) =>
 
     return (
         <>
-            <div ref={wrapperRef}>
+            <div ref={wrapperRef} className="max-h-[50vh] xl:max-h-[70vh]  overflow-y-auto">
                 <table className="min-w-full "  >
                     <thead>
 
@@ -179,6 +179,7 @@ const Table = ({ columns, dataRows,page,setPage,limit,setLimit, totalItems }) =>
                 limit={limit}
                 setLimit={setLimit}
                 totalItems={totalItems}
+                label={label}
             />
         </>
     )

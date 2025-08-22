@@ -148,6 +148,8 @@ const Write = () => {
     });
     return changeCol;
   }, [data?.headers]);
+
+
   return (
     <>
       <div className="container mx-auto">
@@ -155,7 +157,7 @@ const Write = () => {
         <button
           type='submit'
           onClick={() => setIsOpenCreate(true)}
-          className="mt-6 w-fit bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition mb-10 "
+          className="mt-6 w-fit bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition mb-4 "
         >
           CREATE
         </button>
@@ -168,6 +170,7 @@ const Write = () => {
           setPage={setPage}
           limit={limit}
           setLimit={setLimit}
+          label='posts'
 
         />
         <ToastContainer autoClose={3000} />

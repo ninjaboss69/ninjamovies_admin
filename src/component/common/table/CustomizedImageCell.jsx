@@ -13,7 +13,7 @@ const CustomizedImageCell = ({ cell }) => {
             <>
               <img
                 key={i}
-                loader={() => `${appconfig.api_url}/bucket${img}`}
+               
                 src={`${appconfig.api_url}/bucket${value}`}
                 alt="New Image"
                 width={400}
@@ -27,7 +27,7 @@ const CustomizedImageCell = ({ cell }) => {
       ) : (
         <>
           <img
-            loader={() => `${appconfig.api_url}/bucket${value}`}
+            
             src={`${appconfig.api_url}/bucket${value}`}
             alt="New Image"
             className={imageStyle}
