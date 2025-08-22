@@ -58,18 +58,22 @@ const Write = () => {
           toast(error?.data?.message, { type: "error" });
         });
     } else {
-      await instanceForMultipart
-        .post(`/backpanel/post/create`, formData)
-        .then((res) => {
-
-          toast(res?.data?.message, { type: "success" });
-
-          fetchData()
-          setIsOpenCreate(false)
-        })
-        .catch((error) => {
-          toast(error?.data?.message, { type: "error" });
-        });
+      try {
+        const res = await instanceForMultipart
+          .post(`/backpanel/post/create`, formData, {
+            validateStatus: (status) => status >= 200 && status < 300 || status === 412,
+          });
+        if (res.status !== 200) {
+          toast(res?.data?.message || "Error...", { type: "error" })
+          return;
+        }
+        fetchData()
+        setIsOpenCreate(false)
+        toast(res?.data?.message || "Success", { type: "success" });
+      } catch (err) {
+        console.log(err);
+        toast("Something went wrong", { type: "error" })
+      }
     }
   }
 
