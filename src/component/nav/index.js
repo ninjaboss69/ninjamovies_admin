@@ -11,7 +11,7 @@ const Navbar = () => {
 		instanceForJSON
 			.post(`/backpanel/logout-admin`)
 			.then((res) => {
-				
+
 				localStorage.removeItem("accessToken");
 
 				navigate("/login");
@@ -24,12 +24,14 @@ const Navbar = () => {
 			<div className="container mx-auto flex justify-between items-center">
 				<div className="text-white text-lg font-bold w-1/3">
 					<a href="/" >
-						<img src={logoImage} alt=''  className='h-full w-[180px] object-contain ' />
+						<img src={logoImage} alt='' className='h-full w-[180px] object-contain ' />
 					</a>
 				</div>
 				<div className="flex items-center justify-center space-x-4 w-1/3 ">
 
-
+					<a href="/banner" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('banner') ? 'bg-[#6baed6] text-white' : ''}`}>
+						Banner
+					</a>
 					<a href="/editor" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('editor') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Write
 					</a>

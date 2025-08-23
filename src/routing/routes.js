@@ -11,6 +11,7 @@ const FAQ =  lazy(() => import('../pages/faq'));
 const Report = lazy(() => import('../pages/report'));
 const Login = lazy(() => import('../pages/login'));
 const Write = lazy(() => import('../pages/editor'));
+const Banner = lazy(() => import('../pages/banner'))
 
 export const routes = [
 	{
@@ -87,6 +88,18 @@ export const routes = [
 					<ProtectedRoute>
 						<Suspense fallback={<div>Loading FAQ Page...</div>}>
 						<FAQ />
+						</Suspense>
+					</ProtectedRoute>
+
+				),
+			},
+			{
+				key: 6,
+				path: '/banner',
+				element: (
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Banner Page...</div>}>
+						<Banner />
 						</Suspense>
 					</ProtectedRoute>
 

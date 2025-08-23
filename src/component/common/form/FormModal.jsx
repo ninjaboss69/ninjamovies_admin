@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 
-const FormModal = ({ isOpen, onClose, header, children }) => {
+const FormModal = ({ isOpen, onClose, header, children, isLoading }) => {
     const handleSave = () => {
 
         const form = document.querySelector("form");
@@ -23,7 +23,7 @@ const FormModal = ({ isOpen, onClose, header, children }) => {
                         exit={{ scale: 0.95, opacity: 0 }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                       
+
                         <div className="flex items-start justify-between mb-4">
                             <h2 className="text-xl text-center font-semibold">{header}</h2>
                             <span
@@ -34,7 +34,7 @@ const FormModal = ({ isOpen, onClose, header, children }) => {
                             </span>
                         </div>
 
-                       
+
                         <div className="border border-slate-600 rounded-2xl p-6 overflow-y-auto max-h-[calc(80vh-10rem)]">
                             {children}
                         </div>
@@ -48,11 +48,12 @@ const FormModal = ({ isOpen, onClose, header, children }) => {
                                 Cancel
                             </button>
                             <button
+                                disabled={isLoading}
                                 type="submit"
                                 onClick={handleSave}
-                                className="w-full sm:w-36 bg-blue-600 text-white font-medium py-2 px-4 rounded-xl shadow-md hover:bg-blue-700 transition"
+                                className={`w-full sm:w-36  text-white font-medium py-2 px-4 rounded-xl shadow-md hover:bg-blue-700 transition ${isLoading?'bg-gray-400':'bg-blue-600'}`}
                             >
-                                Save
+                               {isLoading? 'Loading...' : 'Save'} 
                             </button>
                         </div>
                     </motion.div>
