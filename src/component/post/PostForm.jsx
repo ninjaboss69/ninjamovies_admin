@@ -210,7 +210,20 @@ const PostForm = ({ id, formData, onConfirm }) => {
                                 licenseKey: editorConfig.licenseKey,
                                 plugins: editorConfig.plugins,
                                 toolbar: editorConfig.toolbar,
-
+                                   image: {
+                                    toolbar: [
+                                    'toggleImageCaption',
+                                    'imageTextAlternative',
+                                    '|',
+                                    'imageStyle:inline',
+                                    'imageStyle:wrapText',
+                                    'imageStyle:breakText',
+                                    '|',
+                                    'resizeImage',
+                                    '|',
+                                    'ckboxImageEdit'
+                                    ]
+                                },
                                 htmlSupport: {
                                     allow: [
                                         {

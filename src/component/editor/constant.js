@@ -61,12 +61,9 @@ import {
     FileRepository
 } from 'ckeditor5'
 const toolbar =
-    ['undo',
+    [
+        'undo',
         'redo',
-        '|',
-        'revisionHistory',
-        'trackChanges',
-        'comment',
         '|',
         'heading',
         '|',
@@ -119,6 +116,7 @@ export const editorConfig = {
         ImageStyle,
         ImageTextAlternative,
         ImageToolbar,
+        Image,
         ImageUpload,
         FileRepository,
         Indent,

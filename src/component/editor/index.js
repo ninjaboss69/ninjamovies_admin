@@ -10,26 +10,52 @@ function Editor({ setPostContent }) {
             <CKEditor
                 editor={editorConfig.editor}
                 config={{
+                    image: {
+                        toolbar: [
+                            'imageStyle:block',
+                            'imageStyle:side',
+                            '|',
+                            'toggleImageCaption',
+                            'imageTextAlternative',
+                            '|',
+                            'linkImage'
+                        ]
+                    },
                     extraPlugins: [CustomUploadAdapterPlugin],
                     licenseKey: editorConfig.licenseKey,
                     plugins: editorConfig.plugins,
                     toolbar: editorConfig.toolbar,
                     initialData: "",
-                    // initialData: '<figure class="image image_resized" style="width:19.47%;"><img style="aspect-ratio:2520/1680;" src="http://uniqenviorn.com:5000/bucket/ninja-images/80da8667-1b77-4884-b699-0d07bea896e4-5a4030a0-cde2-45d0-be60-ac6d0f205acb-Photoon11-06-2025 at 11.24.jpg" width="2520" height="1680"></figure>',
-                    htmlSupport: {
-                        allow: [
-                            {
-                                name: "img",
-                                attributes: true,
-                                classes: true,
-                                styles: true
-                            }
-                        ]
-                    }
+                    // htmlSupport: {
+                    //     allow: [
+                    //         {
+                    //             name: "img",
+                    //             attributes: true,
+                    //             classes: true,
+                    //             styles: true
+                    //         }
+                    //     ]
+                    // },
+
+                    // image: {
+                    //     toolbar: [
+                    //         'toggleImageCaption',
+                    //         'imageTextAlternative',
+                    //         '|',
+                    //         'imageStyle:inline',
+                    //         'imageStyle:wrapText',
+                    //         'imageStyle:breakText',
+                    //         '|',
+                    //         'resizeImage',
+                    //         '|',
+                    //         'ckboxImageEdit'
+                    //     ]
+                    // },
                 }}
                 onChange={(event, editor) => {
                     const data = editor.getData();
-                    console.log("data ", data)
+                    console.log("data ", data);
+                    console.log("hello")
                     setPostContent("content", data);
                 }}
             />
