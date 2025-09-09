@@ -29,7 +29,9 @@ const FAQ = () => {
     const { data, error, loading, fetchData } = useFetchData(`/backpanel/faq?page=${page}&limit=${limit}`);
 
     const savePost = async (data, id) => {
-
+        if (data.publish) {
+            data.publish = data.publish.toString();
+        }
 
         if (id) {
             await instanceForJSON
