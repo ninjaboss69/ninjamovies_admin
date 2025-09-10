@@ -44,7 +44,7 @@
 		"webpack-dev-server": "^5.2.0"
 	},
 	"scripts": {
-		"start": "webpack serve",
+		"start": "webpack serve --port 3500",
 		"prod": "webpack --mode production && cp assets/logo.png build/logo.png"
 	}
 }

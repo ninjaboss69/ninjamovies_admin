@@ -29,14 +29,17 @@ const Navbar = () => {
 				</div>
 				<div className="flex items-center justify-center space-x-4 w-1/3 ">
 
-					<a href="/banner" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('banner') ? 'bg-[#6baed6] text-white' : ''}`}>
+					{/* <a href="/banner" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('banner') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Banner
-					</a>
+					</a> */}
 					<a href="/editor" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('editor') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Write
 					</a>
 					<a href="/faq" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all  ${selected.includes('faq') ? 'bg-[#6baed6] text-white' : ''}`}>
 						FAQ
+					</a>
+					<a href="/portfolio" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all  ${selected.includes('portfolio') ? 'bg-[#6baed6] text-white' : ''}`}>
+						Portfolio
 					</a>
 
 				</div>

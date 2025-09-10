@@ -12,7 +12,7 @@ const Report = lazy(() => import('../pages/report'));
 const Login = lazy(() => import('../pages/login'));
 const Write = lazy(() => import('../pages/editor'));
 const Banner = lazy(() => import('../pages/banner'))
-
+const Portfolio = lazy(() => import("../pages/project"))
 export const routes = [
 	{
 		path: '/',
@@ -93,18 +93,18 @@ export const routes = [
 
 				),
 			},
-			{
-				key: 6,
-				path: '/banner',
-				element: (
-					<ProtectedRoute>
-						<Suspense fallback={<div>Loading Banner Page...</div>}>
-						<Banner />
-						</Suspense>
-					</ProtectedRoute>
+			// {
+			// 	key: 6,
+			// 	path: '/banner',
+			// 	element: (
+			// 		<ProtectedRoute>
+			// 			<Suspense fallback={<div>Loading Banner Page...</div>}>
+			// 			<Banner />
+			// 			</Suspense>
+			// 		</ProtectedRoute>
 
-				),
-			},
+			// 	),
+			// },
 			{
 				key: 666,
 				path: '/login',
@@ -112,6 +112,18 @@ export const routes = [
 					<Suspense fallback={<div>Loading Login Page...</div>}>
 						<Login />
 					</Suspense>
+				),
+			},
+			{
+				key: 7,
+				path: '/portfolio',
+				element: (
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Portfolio Page...</div>}>
+							<Portfolio />
+						</Suspense>
+					</ProtectedRoute>
+
 				),
 			},
 		],
