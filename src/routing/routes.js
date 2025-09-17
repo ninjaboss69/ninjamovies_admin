@@ -93,18 +93,18 @@ export const routes = [
 
 				),
 			},
-			// {
-			// 	key: 6,
-			// 	path: '/banner',
-			// 	element: (
-			// 		<ProtectedRoute>
-			// 			<Suspense fallback={<div>Loading Banner Page...</div>}>
-			// 			<Banner />
-			// 			</Suspense>
-			// 		</ProtectedRoute>
+			{
+				key: 6,
+				path: '/banner',
+				element: (
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Banner Page...</div>}>
+							<Banner />
+						</Suspense>
+					</ProtectedRoute>
 
-			// 	),
-			// },
+				),
+			},
 			{
 				key: 666,
 				path: '/login',

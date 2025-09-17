@@ -29,9 +29,9 @@ const Navbar = () => {
 				</div>
 				<div className="flex items-center justify-center space-x-4 w-1/3 ">
 
-					{/* <a href="/banner" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('banner') ? 'bg-[#6baed6] text-white' : ''}`}>
+					<a href="/banner" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('banner') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Banner
-					</a> */}
+					</a>
 					<a href="/editor" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('editor') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Write
 					</a>
