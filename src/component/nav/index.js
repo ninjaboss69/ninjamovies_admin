@@ -32,6 +32,9 @@ const Navbar = () => {
 					<a href="/banner" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('banner') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Banner
 					</a>
+					<a href="/preview" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all  ${selected.includes('portfolio') ? 'bg-[#6baed6] text-white' : ''}`}>
+						Preview
+					</a>
 					<a href="/editor" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all ${selected.includes('editor') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Write
 					</a>
@@ -41,6 +44,7 @@ const Navbar = () => {
 					<a href="/portfolio" className={`w-[100px] text-center text-black hover:bg-[#6baed6] hover:text-white px-4 py-2 rounded-2xl transition-all  ${selected.includes('portfolio') ? 'bg-[#6baed6] text-white' : ''}`}>
 						Portfolio
 					</a>
+
 
 				</div>
 				<div className="w-1/3 flex justify-end items-center space-x-4">

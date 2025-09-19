@@ -13,6 +13,7 @@ const Login = lazy(() => import('../pages/login'));
 const Write = lazy(() => import('../pages/editor'));
 const Banner = lazy(() => import('../pages/banner'))
 const Portfolio = lazy(() => import("../pages/project"))
+const Preview = lazy(() => import("../pages/preview"))
 export const routes = [
 	{
 		path: '/',
@@ -100,6 +101,18 @@ export const routes = [
 					<ProtectedRoute>
 						<Suspense fallback={<div>Loading Banner Page...</div>}>
 							<Banner />
+						</Suspense>
+					</ProtectedRoute>
+
+				),
+			},
+			{
+				key: 6,
+				path: '/preview',
+				element: (
+					<ProtectedRoute>
+						<Suspense fallback={<div>Loading Banner Page...</div>}>
+							<Preview />
 						</Suspense>
 					</ProtectedRoute>
 
